@@ -9,26 +9,15 @@ import { TasksRepository } from "./tasks.repository";
 
 @Injectable()
 export class TasksService {
-    constructor(
-        @InjectRepository(Task)
-        private tasksRepository: TasksRepository,
-    ) {}
+    constructor(private tasksRepository: TasksRepository) {}
 
     // private tasks: Task[] = [];
     // getAllTasks(): Task[] {
     //     return this.tasks;
     // }
-    // createTask(createTaskDto: CreateTaskDto): Task {
-    //     const { title, description } = createTaskDto;
-    //     const task = {
-    //         id: randomUUID(),
-    //         title,
-    //         description,
-    //         status: TaskStatus.OPEN,
-    //     };
-    //     this.tasks.push(task);
-    //     return task;
-    // }
+    async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+        return this.tasksRepository.createTask(createTaskDto);
+    }
 
     async getTaskById(id: string): Promise<Task> {
         const task = await this.tasksRepository.findOneBy({ id });
