@@ -34,11 +34,16 @@ export class TasksService {
             throw new NotFoundException(`Task with id ${id} not found`);
         }
     }
-    // updateTaskStatus(id: string, status: TaskStatus) {
-    //     const task = this.getTaskById(id);
-    //     task.status = status;
-    //     return task;
-    // }
+
+    async updateTaskStatus(id: string, status: TaskStatus) {
+        const task = await this.getTaskById(id);
+
+        task.status = status;
+
+        await this.tasksRepository.save(task);
+
+        return task;
+    }
 
     // getTasksWithFilters(filterDto: GetTasksFilterDto): Task[] {
     //     const { status, search } = filterDto;
