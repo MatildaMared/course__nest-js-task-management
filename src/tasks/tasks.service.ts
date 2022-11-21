@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { randomUUID } from "crypto";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { GetTasksFilterDto } from "./dto/get-tasks-filter.dto";
 import { Task } from "./dto/task.entity";
@@ -11,7 +10,6 @@ import { TasksRepository } from "./tasks.repository";
 export class TasksService {
     constructor(private tasksRepository: TasksRepository) {}
 
-    // private tasks: Task[] = [];
     // getAllTasks(): Task[] {
     //     return this.tasks;
     // }
@@ -29,14 +27,19 @@ export class TasksService {
         return task;
     }
 
-    // deleteTask(id: string) {
-    //     this.tasks = this.tasks.filter((task) => task.id !== id);
-    // }
+    async deleteTask(id: string): Promise<void> {
+        const result = await this.tasksRepository.delete(id);
+
+        if (result.affected === 0) {
+            throw new NotFoundException(`Task with id ${id} not found`);
+        }
+    }
     // updateTaskStatus(id: string, status: TaskStatus) {
     //     const task = this.getTaskById(id);
     //     task.status = status;
     //     return task;
     // }
+
     // getTasksWithFilters(filterDto: GetTasksFilterDto): Task[] {
     //     const { status, search } = filterDto;
     //     let tasks = this.getAllTasks();
