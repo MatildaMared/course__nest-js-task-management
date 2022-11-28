@@ -10,6 +10,7 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
+import { userInfo } from "os";
 import { GetUser } from "src/auth/get-user.docrator";
 import { User } from "src/auth/user.entity";
 import { CreateTaskDto } from "./dto/create-task.dto";
@@ -24,8 +25,11 @@ export class TasksController {
     constructor(private tasksService: TasksService) {}
 
     @Get()
-    getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
-        return this.tasksService.getTasks(filterDto);
+    getTasks(
+        @Query() filterDto: GetTasksFilterDto,
+        @GetUser() user: User,
+    ): Promise<Task[]> {
+        return this.tasksService.getTasks(filterDto, user);
     }
 
     @Get("/:id")
